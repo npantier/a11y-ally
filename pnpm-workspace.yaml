@@ -1,0 +1,4 @@
+# wxt@0.19 resolves Vite 6, but vitest@2 pulls Vite 5; pin the React plugin to a
+# version compatible with both so the build and tests share one plugin.
+overrides:
+  "@vitejs/plugin-react": "^5.2.0"
