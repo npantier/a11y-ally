@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom';
 import { TextEncoder, TextDecoder } from 'node:util';
 
 // Under Vitest's jsdom environment, esbuild (pulled in by the WxtVitest plugin)
