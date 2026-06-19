@@ -54,12 +54,18 @@ function isHidden(el: Element): boolean {
 
 function readState(el: Element): NodeState {
   const state: NodeState = {};
-  const input = el as HTMLInputElement;
-  if ('disabled' in el && input.disabled) state.disabled = true;
+  if (
+    (el instanceof HTMLInputElement || el instanceof HTMLSelectElement || el instanceof HTMLTextAreaElement) &&
+    el.disabled
+  ) {
+    state.disabled = true;
+  }
   if (el.hasAttribute('required') || el.getAttribute('aria-required') === 'true') {
     state.required = true;
   }
-  if (input.type === 'checkbox' || input.type === 'radio') state.checked = input.checked;
+  if (el instanceof HTMLInputElement && (el.type === 'checkbox' || el.type === 'radio')) {
+    state.checked = el.checked;
+  }
   const ariaChecked = el.getAttribute('aria-checked');
   if (ariaChecked === 'mixed') state.checked = 'mixed';
   else if (ariaChecked === 'true') state.checked = true;
@@ -72,10 +78,10 @@ function readState(el: Element): NodeState {
 }
 
 function readValue(el: Element): string | undefined {
-  const input = el as HTMLInputElement;
-  if (input.tagName === 'INPUT' && ['text', 'email', 'password', 'search', 'tel', 'url', 'number', ''].includes(input.type)) {
-    return input.value || undefined;
+  const TEXT_INPUT_TYPES = new Set(['text', 'email', 'password', 'search', 'tel', 'url', 'number', '']);
+  if (el instanceof HTMLInputElement && TEXT_INPUT_TYPES.has(el.type)) {
+    return el.value || undefined;
   }
-  if (input.tagName === 'TEXTAREA') return (el as unknown as HTMLTextAreaElement).value || undefined;
+  if (el instanceof HTMLTextAreaElement) return el.value || undefined;
   return undefined;
 }

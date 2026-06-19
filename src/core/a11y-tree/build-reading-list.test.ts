@@ -21,7 +21,7 @@ describe('buildReadingList', () => {
       ['button', 'Search'],
       ['link', 'Help'],
     ]);
-    expect(nodes[0].level).toBe(1);
+    expect(nodes[0]!.level).toBe(1);
   });
 
   it('skips hidden and aria-hidden nodes', () => {
@@ -52,7 +52,45 @@ describe('buildReadingList', () => {
   it('maps node ids back to their elements', () => {
     const root = mount(`<button>Search</button>`);
     const { nodes, elements } = buildReadingList(root);
-    const el = elements.get(nodes[0].id)!;
+    const el = elements.get(nodes[0]!.id)!;
     expect(el.tagName).toBe('BUTTON');
+  });
+
+  it('reads ARIA state on non-input elements', () => {
+    const root = mount(
+      `<div role="checkbox" aria-checked="true" aria-expanded="true" aria-label="Toggle me"></div>`,
+    );
+    const { nodes } = buildReadingList(root);
+    const node = nodes.find((n) => n.role === 'checkbox')!;
+    expect(node).toBeDefined();
+    expect(node.state.checked).toBe(true);
+    expect(node.state.expanded).toBe(true);
+  });
+
+  it('skips elements with the hidden attribute', () => {
+    const root = mount(`
+      <button>Visible</button>
+      <button hidden>Hidden attribute</button>
+    `);
+    const { nodes } = buildReadingList(root);
+    expect(nodes.map((n) => n.name)).toEqual(['Visible']);
+  });
+
+  it('skips elements with visibility:hidden', () => {
+    const root = mount(`
+      <button>Visible</button>
+      <button style="visibility:hidden">Visibility hidden</button>
+    `);
+    const { nodes } = buildReadingList(root);
+    expect(nodes.map((n) => n.name)).toEqual(['Visible']);
+  });
+
+  it('skips children of aria-hidden containers', () => {
+    const root = mount(`
+      <button>Visible</button>
+      <div aria-hidden="true"><button>Inside hidden</button></div>
+    `);
+    const { nodes } = buildReadingList(root);
+    expect(nodes.map((n) => n.name)).toEqual(['Visible']);
   });
 });
