@@ -13,7 +13,11 @@ function App() {
     setError(null);
     try {
       const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
-      const report = await sendMessage('runAudit', undefined, tab!.id);
+      if (!tab?.id) {
+        setError('No active tab to act on.');
+        return;
+      }
+      const report = await sendMessage('runAudit', undefined, tab.id);
       setModel(report);
     } catch {
       setError('Could not audit this tab. Reload the page and try again.');
@@ -21,8 +25,16 @@ function App() {
   };
 
   const select = async (selector: string) => {
-    const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
-    await sendMessage('highlightSelector', selector, tab!.id);
+    try {
+      const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+      if (!tab?.id) {
+        setError('No active tab to act on.');
+        return;
+      }
+      await sendMessage('highlightSelector', selector, tab.id);
+    } catch {
+      setError('Could not highlight this element on this page.');
+    }
   };
 
   return (
