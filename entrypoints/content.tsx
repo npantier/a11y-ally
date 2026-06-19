@@ -7,6 +7,7 @@ import { createPlayer } from '../src/core/player/player';
 import { announce } from '../src/core/announcer/announce';
 import { createHighlightBox } from '../src/ui/highlight/highlight-box';
 import { onMessage } from '../src/messaging';
+import { runAudit } from '../src/core/audit/run-audit';
 
 export default defineContentScript({
   matches: ['<all_urls>'],
@@ -69,6 +70,17 @@ export default defineContentScript({
       } else {
         await mount();
       }
+    });
+
+    const pageHighlight = createHighlightBox(document.documentElement);
+
+    onMessage('runAudit', async () => runAudit(document));
+
+    onMessage('highlightSelector', ({ data: selector }) => {
+      const el = document.querySelector(selector);
+      if (!el) return;
+      el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      pageHighlight.show(el);
     });
   },
 });
