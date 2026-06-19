@@ -43,6 +43,6 @@ describe('toReportModel', () => {
 
   it('flattens node target arrays into selector strings', () => {
     const report = toReportModel(axeResults);
-    expect(report.findings[0].nodes[0]).toEqual({ selector: 'img.logo', html: '<img class="logo">' });
+    expect(report.findings[0]!.nodes[0]!).toEqual({ selector: 'img.logo', html: '<img class="logo">' });
   });
 });
