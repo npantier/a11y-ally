@@ -67,7 +67,7 @@ export function createPlayer({ nodes, engine, announce }: PlayerDeps): Player {
       set({ status: 'paused' });
     },
     next() {
-      speakAt(Math.min(state.index + 1, nodes.length - 1) < 0 ? 0 : state.index + 1);
+      speakAt(Math.max(0, Math.min(state.index + 1, nodes.length - 1)));
     },
     previous() {
       speakAt(Math.max(state.index - 1, 0));

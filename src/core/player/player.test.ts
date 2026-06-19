@@ -90,4 +90,14 @@ describe('player', () => {
     player.next();
     expect(listener).toHaveBeenCalled();
   });
+
+  it('next() clamps at the last node and re-speaks it', () => {
+    const { engine } = fakeEngine();
+    const player = createPlayer({ nodes, engine, announce });
+    player.next(); // -> 0
+    player.next(); // -> 1 (last)
+    player.next(); // clamped: stays at 1, re-speaks
+    expect(player.getState()).toMatchObject({ status: 'playing', index: 1 });
+    expect(engine.speak).toHaveBeenLastCalledWith('Two', { rate: 1 }, expect.anything());
+  });
 });
