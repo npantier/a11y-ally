@@ -40,7 +40,9 @@ export function createPlayer({ nodes, engine, announce }: PlayerDeps): Player {
       set({ status: 'idle' });
       return;
     }
+    const wasPaused = state.status === 'paused';
     set({ status: 'playing', index });
+    if (wasPaused) engine.resume();
     engine.speak(announce(node), { rate: state.rate }, {
       onEnd: () => {
         if (state.status === 'playing') speakAt(state.index + 1);

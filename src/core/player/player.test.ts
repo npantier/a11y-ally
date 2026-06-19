@@ -91,6 +91,17 @@ describe('player', () => {
     expect(listener).toHaveBeenCalled();
   });
 
+  it('resumes the engine when next() is pressed from a paused state', () => {
+    const { engine } = fakeEngine();
+    const player = createPlayer({ nodes, engine, announce });
+    player.play();    // playing, index 0
+    player.pause();   // paused
+    player.next();    // must resume + speak index 1
+    expect(engine.resume).toHaveBeenCalled();
+    expect(player.getState()).toMatchObject({ status: 'playing', index: 1 });
+    expect(engine.speak).toHaveBeenLastCalledWith('Two', { rate: 1 }, expect.anything());
+  });
+
   it('next() clamps at the last node and re-speaks it', () => {
     const { engine } = fakeEngine();
     const player = createPlayer({ nodes, engine, announce });
