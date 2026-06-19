@@ -28,7 +28,7 @@ export default defineContentScript({
         onMount: (container) => {
           const host = document.createElement('div');
           container.append(host);
-          const highlight = createHighlightBox(container);
+          const highlight = createHighlightBox(document.body);
           const root = ReactDOM.createRoot(host);
           root.render(
             <Overlay
