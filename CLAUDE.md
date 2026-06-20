@@ -92,6 +92,9 @@ a11y-tree  →  announcer  →  player  ←  speech engine
   duplicated plugin types.
 - Manifest permissions are minimal (`activeTab`); WXT auto-adds `sidepanel` and dev-only
   `scripting`/`tabs`.
+- This repo ships Claude Code hooks in `.claude/settings.json` (type-check on stop;
+  edit-guard on `pnpm-lock.yaml`/`.output/`). They need `jq` on PATH (`brew install jq`) —
+  without it the edit-guard silently no-ops.
 
 ## Scope
 
