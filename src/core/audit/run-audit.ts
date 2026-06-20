@@ -1,4 +1,4 @@
-import axe, { type AxeResults } from 'axe-core';
+import axe, { type AxeResults, type ElementContext } from 'axe-core';
 import type { Finding, ReportModel, Severity } from './types';
 
 const SEVERITY_ORDER: Severity[] = ['critical', 'serious', 'moderate', 'minor'];
@@ -22,7 +22,7 @@ export function toReportModel(results: AxeResults): ReportModel {
   return { summary, findings };
 }
 
-export async function runAudit(context: unknown = document): Promise<ReportModel> {
-  const results = await axe.run(context as any);
+export async function runAudit(context: ElementContext = document): Promise<ReportModel> {
+  const results = await axe.run(context);
   return toReportModel(results);
 }
