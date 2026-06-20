@@ -26,6 +26,7 @@ interface PlayerDeps {
 
 export function createPlayer({ nodes, engine, announce }: PlayerDeps): Player {
   let state: PlayerState = { status: 'idle', index: -1, rate: 1 };
+  let generation = 0;
   const listeners = new Set<() => void>();
 
   const emit = () => listeners.forEach((l) => l());
@@ -44,13 +45,15 @@ export function createPlayer({ nodes, engine, announce }: PlayerDeps): Player {
     set({ status: 'playing', index });
     if (wasPaused) engine.resume();
     // Guard against a stale onEnd: a cancelled utterance can still fire onend
-    // (Chrome does), and without this it would advance off whatever node the
-    // superseding speak() is now playing.
-    const spokenIndex = index;
+    // (Chrome does). Tag each utterance with a generation so a superseded one's
+    // late onEnd can't auto-advance off the node now playing — comparing the
+    // index isn't enough, since a re-speak of the same index (next() at the end,
+    // restart() in place) would match and slip through.
+    const myGeneration = ++generation;
     engine.speak(announce(node), { rate: state.rate }, {
       onEnd: () => {
-        if (state.status === 'playing' && state.index === spokenIndex) {
-          speakAt(spokenIndex + 1);
+        if (state.status === 'playing' && generation === myGeneration) {
+          speakAt(index + 1);
         }
       },
     });

@@ -130,4 +130,25 @@ describe('player', () => {
     ends[0]?.(); // late onEnd from the cancelled node-0 utterance
     expect(player.getState()).toMatchObject({ status: 'playing', index: 1 });
   });
+
+  it('ignores a late onEnd when the supersede re-speaks the same index', () => {
+    // next() at the last node (and restart() in place) re-speaks the current
+    // index. A plain index comparison would let the cancelled utterance's late
+    // onEnd through and flip the player to idle; the generation tag must not.
+    const ends: Array<() => void> = [];
+    const engine: SpeechEngine = {
+      speak: vi.fn((_t, _o, h) => {
+        if (h.onEnd) ends.push(h.onEnd);
+      }),
+      cancel: vi.fn(),
+      pause: vi.fn(),
+      resume: vi.fn(),
+    };
+    const player = createPlayer({ nodes, engine, announce });
+    player.play(); // node 0 -> ends[0]
+    player.next(); // node 1 (last) -> ends[1], index 1
+    player.next(); // clamped: re-speak node 1 -> ends[2], index still 1
+    ends[1]?.(); // late onEnd from the superseded node-1 utterance
+    expect(player.getState()).toMatchObject({ status: 'playing', index: 1 });
+  });
 });
