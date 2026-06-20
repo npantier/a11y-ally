@@ -5,6 +5,13 @@ import type { ReportModel } from '../../src/core/audit/types';
 import { sendMessage } from '../../src/messaging';
 import '../../src/ui/sidepanel/report.css';
 
+// @webext-core/messaging rejects with a connection error when the target tab has
+// no content script (browser-internal / restricted pages). Reloading won't help
+// there, so we steer the user differently from a generic audit failure.
+const isNoReceiver = (err: unknown): boolean =>
+  err instanceof Error &&
+  /receiving end|no response|could not establish connection/i.test(err.message);
+
 function App() {
   const [model, setModel] = useState<ReportModel | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -20,14 +27,20 @@ function App() {
       const report = await sendMessage('runAudit', undefined, tab.id);
       setModel(report);
     } catch (err) {
-      // Restricted pages (chrome://, the Web Store, PDF viewer) have no content
-      // script, so the message has no receiver — log the real cause for debugging.
+      // Most often a restricted page (chrome://, the Web Store, PDF viewer) with
+      // no content script to receive the message, but any audit failure lands
+      // here — log the real cause since the user message is intentionally generic.
       console.error('[a11y-ally] audit failed', err);
-      setError('Could not audit this tab. Reload the page and try again.');
+      setError(
+        isNoReceiver(err)
+          ? 'This page can’t be audited (a browser-internal or restricted page). Open a normal website tab and try again.'
+          : 'Could not audit this tab. Reload the page and try again.',
+      );
     }
   };
 
   const select = async (selector: string) => {
+    setError(null);
     try {
       const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
       if (!tab?.id) {
