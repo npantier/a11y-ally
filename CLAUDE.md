@@ -63,7 +63,7 @@ a11y-tree  →  announcer  →  player  ←  speech engine
 ### `src/messaging/` — typed cross-context messaging
 
 `@webext-core/messaging` with a single `ProtocolMap` (`toggleOverlay`, `runAudit`,
-`highlightElement`, `highlightSelector`). Add new cross-context calls here, not ad hoc.
+`highlightSelector`). Add new cross-context calls here, not ad hoc.
 
 ### `src/ui/` — React components
 
