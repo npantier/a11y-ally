@@ -56,6 +56,12 @@ export default defineContentScript({
         });
         ui.mount();
         mounted = true;
+      } catch (err) {
+        // A failed mount must leave us in a clean idle state, or the next
+        // toolbar click sees mounted=false and silently retries forever.
+        console.error('[a11y-ally] overlay mount failed', err);
+        ui = null;
+        mounted = false;
       } finally {
         mounting = false;
       }

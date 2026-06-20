@@ -19,7 +19,10 @@ function App() {
       }
       const report = await sendMessage('runAudit', undefined, tab.id);
       setModel(report);
-    } catch {
+    } catch (err) {
+      // Restricted pages (chrome://, the Web Store, PDF viewer) have no content
+      // script, so the message has no receiver — log the real cause for debugging.
+      console.error('[a11y-ally] audit failed', err);
       setError('Could not audit this tab. Reload the page and try again.');
     }
   };
@@ -32,7 +35,8 @@ function App() {
         return;
       }
       await sendMessage('highlightSelector', selector, tab.id);
-    } catch {
+    } catch (err) {
+      console.error('[a11y-ally] highlight failed', err);
       setError('Could not highlight this element on this page.');
     }
   };
