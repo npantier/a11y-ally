@@ -111,4 +111,23 @@ describe('player', () => {
     expect(player.getState()).toMatchObject({ status: 'playing', index: 1 });
     expect(engine.speak).toHaveBeenLastCalledWith('Two', { rate: 1 }, expect.anything());
   });
+
+  it('ignores a late onEnd from a superseded utterance', () => {
+    // Chrome fires onend for an utterance cancelled by a subsequent speak().
+    // That stale callback must not auto-advance off the node now playing.
+    const ends: Array<() => void> = [];
+    const engine: SpeechEngine = {
+      speak: vi.fn((_t, _o, h) => {
+        if (h.onEnd) ends.push(h.onEnd);
+      }),
+      cancel: vi.fn(),
+      pause: vi.fn(),
+      resume: vi.fn(),
+    };
+    const player = createPlayer({ nodes, engine, announce });
+    player.play(); // speak node 0 -> ends[0]
+    player.next(); // supersede with node 1 -> ends[1], index now 1
+    ends[0]?.(); // late onEnd from the cancelled node-0 utterance
+    expect(player.getState()).toMatchObject({ status: 'playing', index: 1 });
+  });
 });

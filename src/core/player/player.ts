@@ -43,9 +43,15 @@ export function createPlayer({ nodes, engine, announce }: PlayerDeps): Player {
     const wasPaused = state.status === 'paused';
     set({ status: 'playing', index });
     if (wasPaused) engine.resume();
+    // Guard against a stale onEnd: a cancelled utterance can still fire onend
+    // (Chrome does), and without this it would advance off whatever node the
+    // superseding speak() is now playing.
+    const spokenIndex = index;
     engine.speak(announce(node), { rate: state.rate }, {
       onEnd: () => {
-        if (state.status === 'playing') speakAt(state.index + 1);
+        if (state.status === 'playing' && state.index === spokenIndex) {
+          speakAt(spokenIndex + 1);
+        }
       },
     });
   };
