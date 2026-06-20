@@ -4,3 +4,4 @@ node_modules
 *.log
 .sdd
 docs/superpowers/
+.claude/settings.local.json

@@ -1,0 +1,27 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(jq -r \".tool_input.file_path // empty\"); case \"$f\" in pnpm-lock.yaml|*/pnpm-lock.yaml|*/.output/*) echo \"Refusing to edit $f: generated artifact — regenerate via pnpm install / pnpm build instead.\" >&2; exit 2 ;; esac",
+            "statusMessage": "Checking edit target..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ \"$(jq -r '.stop_hook_active // false')\" = \"true\" ] && exit 0; out=$(pnpm compile 2>&1) || { echo \"$out\" >&2; echo \"Type errors above — fix before finishing.\" >&2; exit 2; }",
+            "statusMessage": "Type-checking (tsc --noEmit)..."
+          }
+        ]
+      }
+    ]
+  }
+}
