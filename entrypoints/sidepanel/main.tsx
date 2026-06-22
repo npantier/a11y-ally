@@ -33,7 +33,7 @@ function App() {
       console.error('[a11y-ally] audit failed', err);
       setError(
         isNoReceiver(err)
-          ? 'This page can’t be audited (a browser-internal or restricted page). Open a normal website tab and try again.'
+          ? 'This page cannot be audited (a browser-internal or restricted page). Open a normal website tab and try again.'
           : 'Could not audit this tab. Reload the page and try again.',
       );
     }
