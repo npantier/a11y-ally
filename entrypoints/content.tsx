@@ -14,8 +14,9 @@ export default defineContentScript({
   cssInjectionMode: 'ui',
 
   async main(ctx) {
-    let mounted = false;
     let mounting = false;
+    // ui is the single source of truth for "an overlay is mounted": non-null
+    // means there's a shadow root to tear down, null means the next toggle mounts.
     let ui: Awaited<ReturnType<typeof createShadowRootUi>> | null = null;
 
     const mount = async () => {
@@ -64,19 +65,17 @@ export default defineContentScript({
           },
         });
         ui.mount();
-        mounted = true;
       } catch (err) {
-        // Tear the partial mount down through WXT's remove() so onRemove
-        // unwinds it, then drop the handle and reset state — otherwise the next
-        // toolbar click re-mounts and stacks an orphaned shadow root each time.
+        // Tear the partial mount down through WXT's remove() so onRemove unwinds
+        // it, then drop the handle. If remove() also fails, keep ui so the next
+        // toggle retries teardown instead of stacking a second overlay.
         console.error('[a11y-ally] overlay mount failed', err);
         try {
           ui?.remove();
+          ui = null;
         } catch (cleanupErr) {
           console.error('[a11y-ally] overlay cleanup after failed mount failed', cleanupErr);
         }
-        ui = null;
-        mounted = false;
       } finally {
         mounting = false;
       }
@@ -84,14 +83,15 @@ export default defineContentScript({
 
     onMessage('toggleOverlay', async () => {
       if (mounting) return;
-      if (mounted && ui) {
+      if (ui) {
         try {
           ui.remove();
+          ui = null;
         } catch (err) {
+          // Keep ui so the next click retries teardown instead of mounting a
+          // second overlay over the one we failed to remove.
           console.error('[a11y-ally] overlay teardown failed', err);
         }
-        ui = null;
-        mounted = false;
       } else {
         await mount();
       }
