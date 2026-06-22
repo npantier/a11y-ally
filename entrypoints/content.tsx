@@ -14,8 +14,9 @@ export default defineContentScript({
   cssInjectionMode: 'ui',
 
   async main(ctx) {
-    let mounted = false;
     let mounting = false;
+    // ui is the single source of truth for "an overlay is mounted": non-null
+    // means there's a shadow root to tear down, null means the next toggle mounts.
     let ui: Awaited<ReturnType<typeof createShadowRootUi>> | null = null;
 
     const mount = async () => {
@@ -35,17 +36,26 @@ export default defineContentScript({
             container.append(host);
             const highlight = createHighlightBox(document.body);
             const root = ReactDOM.createRoot(host);
-            root.render(
-              <Overlay
-                player={player}
-                nodes={nodes}
-                onCurrentChange={(node) => {
-                  const el = node ? elements.get(node.id) : undefined;
-                  if (el) highlight.show(el);
-                  else highlight.hide();
-                }}
-              />,
-            );
+            try {
+              root.render(
+                <Overlay
+                  player={player}
+                  nodes={nodes}
+                  onCurrentChange={(node) => {
+                    const el = node ? elements.get(node.id) : undefined;
+                    if (el) highlight.show(el);
+                    else highlight.hide();
+                  }}
+                />,
+              );
+            } catch (err) {
+              // onRemove only unwinds the state we return below, so if render
+              // throws we must destroy the highlight box (its window listeners)
+              // and the React root here before rethrowing — else they orphan.
+              highlight.destroy();
+              root.unmount();
+              throw err;
+            }
             return { root, highlight, engine };
           },
           onRemove: (mountState) => {
@@ -55,7 +65,17 @@ export default defineContentScript({
           },
         });
         ui.mount();
-        mounted = true;
+      } catch (err) {
+        // Tear the partial mount down through WXT's remove() so onRemove unwinds
+        // it, then drop the handle. If remove() also fails, keep ui so the next
+        // toggle retries teardown instead of stacking a second overlay.
+        console.error('[a11y-ally] overlay mount failed', err);
+        try {
+          ui?.remove();
+          ui = null;
+        } catch (cleanupErr) {
+          console.error('[a11y-ally] overlay cleanup after failed mount failed', cleanupErr);
+        }
       } finally {
         mounting = false;
       }
@@ -63,10 +83,15 @@ export default defineContentScript({
 
     onMessage('toggleOverlay', async () => {
       if (mounting) return;
-      if (mounted && ui) {
-        ui.remove();
-        ui = null;
-        mounted = false;
+      if (ui) {
+        try {
+          ui.remove();
+          ui = null;
+        } catch (err) {
+          // Keep ui so the next click retries teardown instead of mounting a
+          // second overlay over the one we failed to remove.
+          console.error('[a11y-ally] overlay teardown failed', err);
+        }
       } else {
         await mount();
       }

@@ -4,7 +4,6 @@ import type { ReportModel } from '../core/audit/types';
 interface ProtocolMap {
   toggleOverlay(): void;
   runAudit(): ReportModel;
-  highlightElement(id: string): void;
   highlightSelector(selector: string): void;
 }
 
