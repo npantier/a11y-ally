@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Report } from './Report';
-import type { ReportModel } from '../../core/audit/types';
+import { Report } from '../Report';
+import type { ReportModel } from '../../../core/audit/types';
 
 const populated: ReportModel = {
   summary: { critical: 1, serious: 2, moderate: 1, minor: 0, passes: 12 },

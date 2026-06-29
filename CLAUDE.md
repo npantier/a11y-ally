@@ -92,8 +92,11 @@ a11y-tree  →  announcer  →  player  ←  speech engine
 - **Unit tests live in `__tests__/` folders** next to the module under test (e.g.
   `src/core/player/__tests__/player.test.ts`). Cross-module integration tests live in
   `src/core/__integration__/`; the scaffold smoke test is in `src/core/__smoke__/`.
-- **Storybook** (`@storybook/react-vite`) is the component workbench: `*.stories.tsx`
-  colocated with the component, config in `.storybook/`. It runs the plain React UI in
+- **Storybook** (`@storybook/react-vite`) is the component workbench. Stories live in
+  `__stories__/` folders next to the component (e.g. `src/ui/components/__stories__/
+IconButton.stories.tsx`) — mirroring the `__tests__/` layout. The `.storybook/main.ts`
+  glob loads **only** from `__stories__/`, so a misplaced colocated story won't appear.
+  Every component under `src/ui/` should have a story. Stories run the plain React UI in
   isolation (not the Shadow-DOM shell); `preview.ts` imports the overlay/report CSS so
   stories render styled.
 - **Comments explain the why**, especially the non-obvious workarounds (the Vite 5/6

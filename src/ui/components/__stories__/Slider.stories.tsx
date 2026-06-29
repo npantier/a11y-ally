@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useArgs } from 'storybook/preview-api';
-import { Slider } from './Slider';
+import { Slider } from '../Slider';
 
 const meta: Meta<typeof Slider> = {
   title: 'Components/Slider',
