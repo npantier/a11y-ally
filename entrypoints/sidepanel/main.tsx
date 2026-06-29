@@ -56,7 +56,9 @@ function App() {
 
   return (
     <main className="aa-panel">
-      <button type="button" onClick={run}>Run audit</button>
+      <button type="button" onClick={run}>
+        Run audit
+      </button>
       {error && <p className="aa-error">{error}</p>}
       {model && <Report model={model} onSelectFinding={select} />}
     </main>

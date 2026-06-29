@@ -1,0 +1,11 @@
+node_modules
+.output
+.wxt
+dist
+pnpm-lock.yaml
+
+# agent / tooling scratch — not product source
+.sdd
+.superpowers
+docs/superpowers
+.claude

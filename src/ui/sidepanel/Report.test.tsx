@@ -6,8 +6,20 @@ import type { ReportModel } from '../../core/audit/types';
 const model: ReportModel = {
   summary: { critical: 1, serious: 0, moderate: 1, minor: 0, passes: 7 },
   findings: [
-    { ruleId: 'image-alt', impact: 'critical', description: 'Images need alt', helpUrl: 'https://x', nodes: [{ selector: 'img', html: '<img>' }] },
-    { ruleId: 'region', impact: 'moderate', description: 'Use landmarks', helpUrl: 'https://y', nodes: [{ selector: 'div', html: '<div>' }] },
+    {
+      ruleId: 'image-alt',
+      impact: 'critical',
+      description: 'Images need alt',
+      helpUrl: 'https://x',
+      nodes: [{ selector: 'img', html: '<img>' }],
+    },
+    {
+      ruleId: 'region',
+      impact: 'moderate',
+      description: 'Use landmarks',
+      helpUrl: 'https://y',
+      nodes: [{ selector: 'div', html: '<div>' }],
+    },
   ],
 };
 

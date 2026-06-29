@@ -1,5 +1,12 @@
 const TEXT_INPUT_TYPES = new Set([
-  'text', 'email', 'password', 'search', 'tel', 'url', 'number', '',
+  'text',
+  'email',
+  'password',
+  'search',
+  'tel',
+  'url',
+  'number',
+  '',
 ]);
 const BUTTON_INPUT_TYPES = new Set(['button', 'submit', 'reset', 'image']);
 

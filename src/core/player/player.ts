@@ -50,13 +50,17 @@ export function createPlayer({ nodes, engine, announce }: PlayerDeps): Player {
     // index isn't enough, since a re-speak of the same index (next() at the end,
     // restart() in place) would match and slip through.
     const myGeneration = ++generation;
-    engine.speak(announce(node), { rate: state.rate }, {
-      onEnd: () => {
-        if (state.status === 'playing' && generation === myGeneration) {
-          speakAt(index + 1);
-        }
+    engine.speak(
+      announce(node),
+      { rate: state.rate },
+      {
+        onEnd: () => {
+          if (state.status === 'playing' && generation === myGeneration) {
+            speakAt(index + 1);
+          }
+        },
       },
-    });
+    );
   };
 
   return {

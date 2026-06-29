@@ -10,15 +10,15 @@ describe('announce', () => {
   });
 
   it('reads a required text field', () => {
-    expect(
-      announce({ ...base, role: 'textbox', name: 'Email', state: { required: true } }),
-    ).toBe('Email, edit text, required');
+    expect(announce({ ...base, role: 'textbox', name: 'Email', state: { required: true } })).toBe(
+      'Email, edit text, required',
+    );
   });
 
   it('reads a heading name-first with its level', () => {
-    expect(
-      announce({ ...base, role: 'heading', name: 'Doctors near you', level: 2 }),
-    ).toBe('Doctors near you, heading level 2');
+    expect(announce({ ...base, role: 'heading', name: 'Doctors near you', level: 2 })).toBe(
+      'Doctors near you, heading level 2',
+    );
   });
 
   it('reads a checked checkbox', () => {
@@ -28,14 +28,19 @@ describe('announce', () => {
   });
 
   it('reads value after state', () => {
-    expect(
-      announce({ ...base, role: 'textbox', name: 'Email', value: 'a@b.com' }),
-    ).toBe('Email, edit text, a@b.com');
+    expect(announce({ ...base, role: 'textbox', name: 'Email', value: 'a@b.com' })).toBe(
+      'Email, edit text, a@b.com',
+    );
   });
 
   it('reads set position for list items', () => {
     expect(
-      announce({ ...base, role: 'listitem', name: 'Cardiology', setInfo: { position: 2, size: 5 } }),
+      announce({
+        ...base,
+        role: 'listitem',
+        name: 'Cardiology',
+        setInfo: { position: 2, size: 5 },
+      }),
     ).toBe('Cardiology, list item, 2 of 5');
   });
 

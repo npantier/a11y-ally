@@ -32,7 +32,11 @@ describe('toReportModel', () => {
   it('counts passes and violations by severity', () => {
     const report = toReportModel(axeResults);
     expect(report.summary).toEqual({
-      critical: 1, serious: 1, moderate: 1, minor: 0, passes: 2,
+      critical: 1,
+      serious: 1,
+      moderate: 1,
+      minor: 0,
+      passes: 2,
     });
   });
 
@@ -43,6 +47,9 @@ describe('toReportModel', () => {
 
   it('flattens node target arrays into selector strings', () => {
     const report = toReportModel(axeResults);
-    expect(report.findings[0]!.nodes[0]!).toEqual({ selector: 'img.logo', html: '<img class="logo">' });
+    expect(report.findings[0]!.nodes[0]!).toEqual({
+      selector: 'img.logo',
+      html: '<img class="logo">',
+    });
   });
 });
