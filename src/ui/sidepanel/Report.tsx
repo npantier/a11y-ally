@@ -38,7 +38,7 @@ function FindingRow({ finding, onSelect }: { finding: Finding; onSelect: (s: str
   return (
     <details className="aa-finding">
       <summary>{finding.description}</summary>
-      <a href={finding.helpUrl} target="_blank" rel="noreferrer">
+      <a href={finding.helpUrl} target="_blank" rel="noopener noreferrer">
         How to fix
       </a>
       <ul>

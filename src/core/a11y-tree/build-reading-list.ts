@@ -12,6 +12,17 @@ const INTERACTIVE_ROLES = new Set([
   'slider',
 ]);
 
+const TEXT_INPUT_TYPES = new Set([
+  'text',
+  'email',
+  'password',
+  'search',
+  'tel',
+  'url',
+  'number',
+  '',
+]);
+
 export interface ReadingList {
   nodes: AnnounceableNode[];
   elements: Map<string, Element>;
@@ -86,16 +97,6 @@ function readState(el: Element): NodeState {
 }
 
 function readValue(el: Element): string | undefined {
-  const TEXT_INPUT_TYPES = new Set([
-    'text',
-    'email',
-    'password',
-    'search',
-    'tel',
-    'url',
-    'number',
-    '',
-  ]);
   if (el instanceof HTMLInputElement && TEXT_INPUT_TYPES.has(el.type)) {
     return el.value || undefined;
   }
