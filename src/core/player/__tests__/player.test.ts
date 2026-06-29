@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
-import { createPlayer } from './player';
-import type { SpeechEngine } from '../speech/types';
-import type { AnnounceableNode } from '../types';
+import { createPlayer } from '../player';
+import type { SpeechEngine } from '../../speech/types';
+import type { AnnounceableNode } from '../../types';
 
 function fakeEngine() {
   let endHandler: (() => void) | undefined;

@@ -2,6 +2,7 @@ node_modules
 .output
 .wxt
 dist
+storybook-static
 pnpm-lock.yaml
 
 # agent / tooling scratch — not product source

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { Report } from './Report';
-import type { ReportModel } from '../../core/audit/types';
+import { Report } from '../Report';
+import type { ReportModel } from '../../../core/audit/types';
 
 const model: ReportModel = {
   summary: { critical: 1, serious: 0, moderate: 1, minor: 0, passes: 7 },

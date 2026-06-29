@@ -1,6 +1,7 @@
 node_modules
 .wxt
 .output
+storybook-static
 *.log
 .sdd
 docs/superpowers/

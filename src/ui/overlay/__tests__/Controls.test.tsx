@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Controls } from './Controls';
-import type { Player, PlayerState } from '../../core/player/player';
+import { Controls } from '../Controls';
+import type { Player, PlayerState } from '../../../core/player/player';
 
 function fakePlayer(state: PlayerState): Player {
   return {

@@ -20,9 +20,11 @@ pnpm format       # prettier --write .
 pnpm format:check # prettier --check . (CI/verify-friendly)
 pnpm test         # vitest run (unit + integration)
 pnpm test:watch   # vitest in watch mode
+pnpm storybook    # Storybook dev server on :6006
+pnpm build-storybook # static Storybook build (storybook-static/)
 ```
 
-Run a single test file: `pnpm test src/core/player/player.test.ts`.
+Run a single test file: `pnpm test src/core/player/__tests__/player.test.ts`.
 
 > **Gotcha:** `pnpm test` binds a port via the WXT Vitest plugin and fails under a
 > restricted sandbox. Run it with the sandbox disabled.
@@ -87,8 +89,16 @@ a11y-tree  →  announcer  →  player  ←  speech engine
 - **Prefer early returns** over deep nesting; descriptive names over terse ones.
 - **Formatting is Prettier** (`pnpm format` / `format:check`); **linting is ESLint**
   flat config (`pnpm lint`). No git hooks run these yet — see Deferred decisions.
-- **Tests are colocated** as `*.test.ts(x)` next to source. Cross-module tests live
-  in `src/core/__integration__/`; the scaffold smoke test is in `src/core/__smoke__/`.
+- **Unit tests live in `__tests__/` folders** next to the module under test (e.g.
+  `src/core/player/__tests__/player.test.ts`). Cross-module integration tests live in
+  `src/core/__integration__/`; the scaffold smoke test is in `src/core/__smoke__/`.
+- **Storybook** (`@storybook/react-vite`) is the component workbench. Stories live in
+  `__stories__/` folders next to the component (e.g. `src/ui/components/__stories__/
+IconButton.stories.tsx`) — mirroring the `__tests__/` layout. The `.storybook/main.ts`
+  glob loads **only** from `__stories__/`, so a misplaced colocated story won't appear.
+  Every component under `src/ui/` should have a story. Stories run the plain React UI in
+  isolation (not the Shadow-DOM shell); `preview.ts` imports the overlay/report CSS so
+  stories render styled.
 - **Comments explain the why**, especially the non-obvious workarounds (the Vite 5/6
   duplicate-type bridge in `vitest.config.ts`, the TextEncoder realm fix in
   `src/test/setup.ts`, the user-gesture requirement for opening the side panel).
@@ -121,9 +131,6 @@ Punted during convention setup — revisit when the friction shows up:
       `pnpm lint` / `format:check` only; the `.claude/settings.json` hooks still cover
       typecheck-on-stop. Adopt lefthook (lean pre-commit) if unformatted/unlinted code
       starts landing.
-- [ ] **Storybook:** skipped. The UI is a Shadow-DOM extension overlay, awkward to
-      host in Storybook, and components are covered by Testing Library. Revisit if the
-      component surface grows enough to want isolated visual development.
 
 ## Scope
 
