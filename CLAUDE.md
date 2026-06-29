@@ -24,7 +24,7 @@ pnpm storybook    # Storybook dev server on :6006
 pnpm build-storybook # static Storybook build (storybook-static/)
 ```
 
-Run a single test file: `pnpm test src/core/player/player.test.ts`.
+Run a single test file: `pnpm test src/core/player/__tests__/player.test.ts`.
 
 > **Gotcha:** `pnpm test` binds a port via the WXT Vitest plugin and fails under a
 > restricted sandbox. Run it with the sandbox disabled.

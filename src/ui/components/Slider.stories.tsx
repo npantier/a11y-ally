@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
+import { useArgs } from 'storybook/preview-api';
 import { Slider } from './Slider';
 
 const meta: Meta<typeof Slider> = {
@@ -12,10 +12,11 @@ const meta: Meta<typeof Slider> = {
     step: 0.1,
     value: 1,
   },
-  // Slider is controlled — wire local state so the thumb actually moves in the workbench.
+  // Slider is controlled — back it with the story's own args so dragging the thumb and
+  // editing the Controls panel stay in sync (plain useState wouldn't react to controls).
   render: (args) => {
-    const [value, setValue] = useState(args.value);
-    return <Slider {...args} value={value} onChange={setValue} />;
+    const [{ value }, updateArgs] = useArgs();
+    return <Slider {...args} value={value} onChange={(next) => updateArgs({ value: next })} />;
   },
 };
 
