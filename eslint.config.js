@@ -13,7 +13,7 @@ const noDefaultExport = {
 export default tseslint.config(
   {
     // build output, framework scratch, and deps are not ours to lint
-    ignores: ['node_modules', '.output', '.wxt', 'dist'],
+    ignores: ['node_modules', '.output', '.wxt', 'dist', 'storybook-static'],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -24,7 +24,7 @@ export default tseslint.config(
   },
   {
     // Files the framework/tooling REQUIRE to default-export.
-    files: ['**/entrypoints/**', '**/*.config.{ts,js}', '**/*.stories.tsx'],
+    files: ['**/entrypoints/**', '**/*.config.{ts,js}', '**/*.stories.{ts,tsx}', '.storybook/**'],
     rules: { 'no-restricted-syntax': 'off' },
   },
   {
