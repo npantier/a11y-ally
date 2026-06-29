@@ -15,6 +15,9 @@ side panel.
 pnpm dev          # launch Chrome with the extension + HMR
 pnpm build        # emit .output/chrome-mv3
 pnpm compile      # tsc --noEmit typecheck (no build artifacts)
+pnpm lint         # eslint . (named-export rule; build output ignored)
+pnpm format       # prettier --write .
+pnpm format:check # prettier --check . (CI/verify-friendly)
 pnpm test         # vitest run (unit + integration)
 pnpm test:watch   # vitest in watch mode
 ```
@@ -73,9 +76,17 @@ a11y-tree  →  announcer  →  player  ←  speech engine
 
 ## Conventions
 
-- **TypeScript strict** + `noUncheckedIndexedAccess`. Avoid `any` — narrow with a
-  small typed cast and a comment explaining *why* (see `SidePanelCapable` in
-  `background.ts`), rather than reaching for `any`.
+- **TypeScript strict** + `noUncheckedIndexedAccess` + `noImplicitOverride`. Avoid
+  `any` — narrow with a small typed cast and a comment explaining _why_ (see
+  `SidePanelCapable` in `background.ts`), rather than reaching for `any`.
+- **Named exports** everywhere; `export default` only where the framework requires
+  it (WXT `entrypoints/`, `*.config.*`). Enforced by eslint (`no-restricted-syntax`
+  bans `ExportDefaultDeclaration`).
+- **Function declarations** (`export function`) are the house style — intentionally
+  _not_ constrained to arrow consts, so there's no `func-style` lint rule.
+- **Prefer early returns** over deep nesting; descriptive names over terse ones.
+- **Formatting is Prettier** (`pnpm format` / `format:check`); **linting is ESLint**
+  flat config (`pnpm lint`). No git hooks run these yet — see Deferred decisions.
 - **Tests are colocated** as `*.test.ts(x)` next to source. Cross-module tests live
   in `src/core/__integration__/`; the scaffold smoke test is in `src/core/__smoke__/`.
 - **Comments explain the why**, especially the non-obvious workarounds (the Vite 5/6
@@ -95,6 +106,24 @@ a11y-tree  →  announcer  →  player  ←  speech engine
 - This repo ships Claude Code hooks in `.claude/settings.json` (type-check on stop;
   edit-guard on `pnpm-lock.yaml`/`.output/`). They need `jq` on PATH (`brew install jq`) —
   without it the edit-guard silently no-ops.
+
+## Decision records
+
+When a major or architectural decision is made, capture it as an ADR in `docs/adr/`
+using the `template.md` there (sequential `NNNN-title.md`). Mundane config choices
+(lint rules, formatter settings, script names) live in this file, not in an ADR.
+
+## Deferred decisions
+
+Punted during convention setup — revisit when the friction shows up:
+
+- [ ] **Git hooks (lefthook):** skipped. ESLint/Prettier run via editor + manual
+      `pnpm lint` / `format:check` only; the `.claude/settings.json` hooks still cover
+      typecheck-on-stop. Adopt lefthook (lean pre-commit) if unformatted/unlinted code
+      starts landing.
+- [ ] **Storybook:** skipped. The UI is a Shadow-DOM extension overlay, awkward to
+      host in Storybook, and components are covered by Testing Library. Revisit if the
+      component surface grows enough to want isolated visual development.
 
 ## Scope
 
