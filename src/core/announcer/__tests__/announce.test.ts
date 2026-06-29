@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { announce } from './announce';
-import type { AnnounceableNode } from '../types';
+import { announce } from '../announce';
+import type { AnnounceableNode } from '../../types';
 
 const base: AnnounceableNode = { id: '1', role: 'generic', name: '', state: {} };
 

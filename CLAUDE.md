@@ -87,8 +87,9 @@ a11y-tree  →  announcer  →  player  ←  speech engine
 - **Prefer early returns** over deep nesting; descriptive names over terse ones.
 - **Formatting is Prettier** (`pnpm format` / `format:check`); **linting is ESLint**
   flat config (`pnpm lint`). No git hooks run these yet — see Deferred decisions.
-- **Tests are colocated** as `*.test.ts(x)` next to source. Cross-module tests live
-  in `src/core/__integration__/`; the scaffold smoke test is in `src/core/__smoke__/`.
+- **Unit tests live in `__tests__/` folders** next to the module under test (e.g.
+  `src/core/player/__tests__/player.test.ts`). Cross-module integration tests live in
+  `src/core/__integration__/`; the scaffold smoke test is in `src/core/__smoke__/`.
 - **Comments explain the why**, especially the non-obvious workarounds (the Vite 5/6
   duplicate-type bridge in `vitest.config.ts`, the TextEncoder realm fix in
   `src/test/setup.ts`, the user-gesture requirement for opening the side panel).

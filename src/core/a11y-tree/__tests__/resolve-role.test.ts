@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { resolveRole } from './resolve-role';
+import { resolveRole } from '../resolve-role';
 
 function el(html: string): Element {
   const t = document.createElement('template');

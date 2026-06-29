@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildReadingList } from './build-reading-list';
+import { buildReadingList } from '../build-reading-list';
 
 function mount(html: string): HTMLElement {
   const root = document.createElement('div');

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { createHighlightBox } from './highlight-box';
+import { createHighlightBox } from '../highlight-box';
 
 describe('createHighlightBox', () => {
   it('positions the box over the target rect on show', () => {

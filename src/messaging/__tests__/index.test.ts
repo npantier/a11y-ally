@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { onMessage, sendMessage } from './index';
+import { onMessage, sendMessage } from '../index';
 
 describe('messaging protocol', () => {
   it('round-trips a typed runAudit message', async () => {

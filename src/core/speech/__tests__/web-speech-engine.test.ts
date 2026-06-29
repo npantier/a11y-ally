@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { createWebSpeechEngine } from './web-speech-engine';
+import { createWebSpeechEngine } from '../web-speech-engine';
 
 class FakeUtterance {
   text: string;
