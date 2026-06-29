@@ -1,9 +1,40 @@
-body { margin: 0; font: 14px/1.5 system-ui, sans-serif; }
-.aa-panel { padding: 12px; }
-.aa-summary { background: #f1f3f4; padding: 8px; border-radius: 6px; }
-.aa-group h2 { text-transform: capitalize; font-size: 14px; margin: 14px 0 6px; }
-.aa-critical h2 { color: #b3261e; }
-.aa-serious h2 { color: #d56e0c; }
-.aa-finding { border: 1px solid #e0e0e0; border-radius: 6px; padding: 6px 8px; margin-bottom: 6px; }
-.aa-finding code { display: block; color: #555; font-size: 12px; margin-top: 4px; }
-.aa-error { color: #b3261e; }
+body {
+  margin: 0;
+  font:
+    14px/1.5 system-ui,
+    sans-serif;
+}
+.aa-panel {
+  padding: 12px;
+}
+.aa-summary {
+  background: #f1f3f4;
+  padding: 8px;
+  border-radius: 6px;
+}
+.aa-group h2 {
+  text-transform: capitalize;
+  font-size: 14px;
+  margin: 14px 0 6px;
+}
+.aa-critical h2 {
+  color: #b3261e;
+}
+.aa-serious h2 {
+  color: #d56e0c;
+}
+.aa-finding {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+}
+.aa-finding code {
+  display: block;
+  color: #555;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.aa-error {
+  color: #b3261e;
+}

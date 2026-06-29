@@ -3,7 +3,13 @@ import type { AnnounceableNode, NodeState } from '../types';
 import { resolveRole } from './resolve-role';
 
 const INTERACTIVE_ROLES = new Set([
-  'button', 'link', 'textbox', 'checkbox', 'radio', 'combobox', 'slider',
+  'button',
+  'link',
+  'textbox',
+  'checkbox',
+  'radio',
+  'combobox',
+  'slider',
 ]);
 
 export interface ReadingList {
@@ -55,7 +61,9 @@ function isHidden(el: Element): boolean {
 function readState(el: Element): NodeState {
   const state: NodeState = {};
   if (
-    (el instanceof HTMLInputElement || el instanceof HTMLSelectElement || el instanceof HTMLTextAreaElement) &&
+    (el instanceof HTMLInputElement ||
+      el instanceof HTMLSelectElement ||
+      el instanceof HTMLTextAreaElement) &&
     el.disabled
   ) {
     state.disabled = true;
@@ -78,7 +86,16 @@ function readState(el: Element): NodeState {
 }
 
 function readValue(el: Element): string | undefined {
-  const TEXT_INPUT_TYPES = new Set(['text', 'email', 'password', 'search', 'tel', 'url', 'number', '']);
+  const TEXT_INPUT_TYPES = new Set([
+    'text',
+    'email',
+    'password',
+    'search',
+    'tel',
+    'url',
+    'number',
+    '',
+  ]);
   if (el instanceof HTMLInputElement && TEXT_INPUT_TYPES.has(el.type)) {
     return el.value || undefined;
   }

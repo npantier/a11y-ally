@@ -9,14 +9,24 @@ export function Controls({ player }: { player: Player }) {
 
   return (
     <div className="aa-controls">
-      <IconButton label="Previous" onClick={() => player.previous()}>⏮</IconButton>
+      <IconButton label="Previous" onClick={() => player.previous()}>
+        ⏮
+      </IconButton>
       {playing ? (
-        <IconButton label="Pause" onClick={() => player.pause()}>⏸</IconButton>
+        <IconButton label="Pause" onClick={() => player.pause()}>
+          ⏸
+        </IconButton>
       ) : (
-        <IconButton label="Play" onClick={() => player.play()}>▶</IconButton>
+        <IconButton label="Play" onClick={() => player.play()}>
+          ▶
+        </IconButton>
       )}
-      <IconButton label="Next" onClick={() => player.next()}>⏭</IconButton>
-      <IconButton label="Restart" onClick={() => player.restart()}>↺</IconButton>
+      <IconButton label="Next" onClick={() => player.next()}>
+        ⏭
+      </IconButton>
+      <IconButton label="Restart" onClick={() => player.restart()}>
+        ↺
+      </IconButton>
       <Slider
         label="Speed"
         min={0.5}

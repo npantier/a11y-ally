@@ -8,7 +8,15 @@ describe('createHighlightBox', () => {
     const target = document.createElement('button');
     document.body.append(target);
     target.getBoundingClientRect = vi.fn(() => ({
-      top: 10, left: 20, width: 100, height: 30, right: 120, bottom: 40, x: 20, y: 10, toJSON: () => {},
+      top: 10,
+      left: 20,
+      width: 100,
+      height: 30,
+      right: 120,
+      bottom: 40,
+      x: 20,
+      y: 10,
+      toJSON: () => {},
     })) as any;
 
     const hl = createHighlightBox(root);
